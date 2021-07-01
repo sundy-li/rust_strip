@@ -1,11 +1,11 @@
 ## rust_strip
 
-A simple tool to remove unused rust use imports.
+A simple tool to remove unused imports in RUST.
 
 
-1. Cargo b
-2. Read the warning logs
-3. Replace the files
+1. Cargo build/tests
+2. Process the warning logs of unused imports
+3. Then replace the involved files
 
 
 ## usage
@@ -13,11 +13,12 @@ A simple tool to remove unused rust use imports.
 ```
 go get -u -v github.com/sundy-li/rust_strip
 
-cd your_sub_crate_path
-rust_strip -root=you_root_crate_path
+cd your_crate_path
+
+rust_strip -root=your_root_crate_path
 
 ## for test files
-rust_strip -root=you_root_crate_path -test
+rust_strip -root=your_root_crate_path -test
 ```
 
 ## More
