@@ -32,15 +32,27 @@ warning: unused import: `std::convert::TryFrom`
 
 **/
 
+// flags
+var (
+	pattern = ""
+	root    = ""
+	test    bool
+)
+
+func init() {
+	flag.StringVar(&pattern, "pattern", "", "files glob patterns to process")
+	flag.StringVar(&root, "root", "", "cargo root module")
+	flag.BoolVar(&test, "test", false, "use cargo test")
+	flag.Parse()
+
+}
+
 var (
 	mp    = make(map[string][]MsgLine)
 	files = make(map[string]bool)
 
-	importReg   = regexp.MustCompile("`(\\S+)`")
+	importReg   = regexp.MustCompile("`(.+)`")
 	rustFileReg = regexp.MustCompile(`[\w_\-/\d]+.rs`)
-
-	pattern = ""
-	root    = ""
 )
 
 type MsgLine struct {
@@ -49,10 +61,6 @@ type MsgLine struct {
 }
 
 func main() {
-	flag.StringVar(&pattern, "pattern", "", "files glob patterns to process")
-	flag.StringVar(&root, "root", "", "cargo root module")
-	flag.Parse()
-
 	if pattern != "" {
 		matches, err := filepath.Glob(pattern)
 		if err != nil {
@@ -75,7 +83,12 @@ func main() {
 }
 
 func buildMap() error {
-	cmd := exec.Command("cargo", "b")
+	var command = "b"
+	if test {
+		command = "test"
+	}
+
+	cmd := exec.Command("cargo", command)
 	bs, err := cmd.CombinedOutput()
 	if err != nil {
 		return err
