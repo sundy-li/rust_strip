@@ -3,7 +3,7 @@
 A simple tool to remove unused imports in RUST.
 
 
-1. Cargo build/tests
+1. Call `Cargo build/test`
 2. Process the warning logs of unused imports
 3. Then replace the involved files
 
